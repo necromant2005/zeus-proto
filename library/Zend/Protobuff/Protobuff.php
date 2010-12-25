@@ -11,11 +11,8 @@ class Protobuff
     const FIELD_TYPE     = 'type';
 
     private $_types = array(
-        8 => array(
-            self::INT32
-        ),
-        16 => array(
-            self::INT64
+        0 => array(
+            self::INT32, self::INT64
         ),
     );
 
@@ -30,10 +27,21 @@ class Protobuff
         return $output;
     }
 
-    protected function _decode(&$buffer, $options)
+    public function encode($map, $values)
+    {
+        $number = 1;
+        $output = '';
+        foreach ($map as $name=>$options) {
+            $output = $this->_charWireType($options, $number) . $this->_encode($values[$name], $options);
+            $number++;
+        }
+        return $output;
+    }
+
+    protected function _decode(&$buffer, $options, $number)
     {
         if (!$options[self::FIELD_REQUIRED]) return false;
-        if ($this->_isValidType($buffer[0], $options, $number)) throw new Exception('Type missmatch');
+        if (!$this->_isValidType($buffer[0], $options, $number)) throw new \Exception('Type missmatch');
         $_buffer = substr($buffer, 1);
         $bytes = $this->_toBytes($_buffer);
         $bytes = array_reverse($bytes);
@@ -46,14 +54,27 @@ class Protobuff
         return $this->_bitsToNumber($bits);
     }
 
+    protected function _encode($value, $options)
+    {
+        $bytes = $this->_numberToBytes($value);
+        if (count($bytes)==1) {
+            return chr(reset($bytes)) . chr(1);
+        }
+        $bytes = array_reverse($bytes);
+        $bits = '';
+        foreach ($bytes as $byte) {
+            $bits .= substr($this->_toBits($byte), 1);
+        }
+        $bits = $this->_dropFirstZeros($bits);
+        $this->_dump($this->_bitsToChars($bits));
+        return $this->_bitsToChars($bits);
+    }
+
+
+
     protected function _isValidType($char, $options, $number)
     {
-        $ord = ord($char);
-        if (!in_array($ord, $this->_types)) return false;
-        foreach ($this->types[$ord] as $type) {
-            if ($type==$options[self::FIELD_TYPE]) return true;
-        }
-        return false;
+        return $this->_charWireType($options, $number)==$char;
     }
 
     protected function _toBytes($buffer)
@@ -63,6 +84,12 @@ class Protobuff
             $bytes[] = ord($buffer[$i]);
         }
         return $bytes;
+    }
+
+    protected function _numberToBytes($number)
+    {
+        if ($number<256) return array($number);
+
     }
 
     protected function _toBits($number)
@@ -85,6 +112,39 @@ class Protobuff
             $number += bindec(substr($bits, $i*8, 8));
         }
         return $number;
+    }
+
+    protected function _bitsToChars($bits)
+    {
+        $prefix = strlen($bits) % 8;
+        $bits = str_repeat(0, $prefix) . $bits;
+        $chars = '';
+        for ($i=0;$i<strlen($bits)/8;$i++) {
+            $chars .= chr(substr($bits, $i*8, 8));
+        }
+        return $chars;
+    }
+
+    protected function _charWireType($options, $number)
+    {
+        $type = $options[self::FIELD_TYPE];
+        foreach ($this->_types as $i=>$list) {
+            if (!in_array($type, $list)) continue;
+            return chr($number<<3|$i);
+        }
+        throw new \Exception('Unknow type ' . $type);
+    }
+
+    protected function _dump($string)
+    {
+        for ($i=0;$i<strlen($string);$i++) {
+            echo '\\' . ord($string[$i]);
+        }
+        echo PHP_EOL;
+        for ($i=0;$i<strlen($string);$i++) {
+            echo '\\' . dechex(ord($string[$i]));
+        }
+        echo PHP_EOL;
     }
 }
 
