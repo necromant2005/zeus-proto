@@ -1,0 +1,5 @@
+message ClockEntry {
+   required int32 node_id = 1;
+   required int64 version = 2;
+}
+
