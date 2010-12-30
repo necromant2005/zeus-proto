@@ -1,7 +1,7 @@
 <?php
 namespace Zend\Protobuff;
 
-class Decoder
+class Decoder extends AbstractProtobuff
 {
     public function decode(array $map, $buffer)
     {
@@ -22,11 +22,11 @@ class Decoder
 
     protected function _decodeValue(&$buffer, array $options)
     {
-        switch (Protobuff::getWireTypeClass($options)) {
+        switch ($this->_getWireTypeClass($options)) {
             case 0:
                 return $this->_decodeValue128($buffer, $options);
             default:
-                throw new \Exception('Can\'t decode class ' . Protobuff::getWireTypeClass($options));
+                throw new \Exception('Can\'t decode class ' . $this->_getWireTypeClass($options));
         }
     }
 

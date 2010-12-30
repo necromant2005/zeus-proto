@@ -1,14 +1,14 @@
 <?php
 namespace Zend\Protobuff;
 
-class Encoder
+class Encoder extends AbstractProtobuff
 {
     public function encode(array $map, array $values)
     {
         $buffer = '';
         $number = 1;
         foreach ($map as $name=>$options) {
-            if ($options[Protobuff::FIELD_REQUIRED] && !array_key_exists($name, $values)) {
+            if ($options[AbstractProtobuff::FIELD_REQUIRED] && !array_key_exists($name, $values)) {
                 throw new \Exception('Field "' . $name . '" is required');
             }
             $value = $values[$name];
@@ -20,16 +20,16 @@ class Encoder
 
     protected function _encodeWireType($number, array $options)
     {
-        return chr($number<<3|Protobuff::getWireTypeClass($options));
+        return chr($number<<3|$this->_getWireTypeClass($options));
     }
 
     protected function _encodeValue($value, array $options)
     {
-        switch (Protobuff::getWireTypeClass($options)) {
+        switch ($this->_getWireTypeClass($options)) {
             case 0:
                 return $this->_encodeVariant128($value);
             default:
-                throw new \Exception('Can\'t encode class' .  Protobuff::getWireTypeClass($options));
+                throw new \Exception('Can\'t encode class' .  $this->_getWireTypeClass($options));
         }
     }
 

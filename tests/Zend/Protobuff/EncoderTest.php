@@ -17,7 +17,7 @@ class EncoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_protobuff->encode(array(
             'a' => array(
                 'required' => true,
-                'type'     => Pb\Protobuff::TYPE_INT32,
+                'type'     => Pb\AbstractProtobuff::TYPE_INT32,
                 'default'  => 1,
             ),
         ), array('a'=>150)), file_get_contents(__DIR__ . '/_files/example/Test1.pb'));
