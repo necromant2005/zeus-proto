@@ -10,12 +10,6 @@ class Protobuff
     const FIELD_REQUIRED = 'required';
     const FIELD_TYPE     = 'type';
 
-    private $_types = array(
-        0 => array(
-            self::INT32, self::INT64
-        ),
-    );
-
     public function decode($map, $buffer)
     {
         $number = 1;

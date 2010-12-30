@@ -12,7 +12,7 @@ class ProtobuffTest extends \PHPUnit_Framework_TestCase
         $this->_protobuff = new ProtocolBuffers;
     }
 
-    public function testDecodeStart()
+    public function t_estDecodeStart()
     {
         $this->assertEquals($this->_protobuff->decode(array(
             'a' => array(
@@ -25,7 +25,7 @@ class ProtobuffTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    public function testEncodeStart()
+    public function t_estEncodeStart()
     {
         $this->assertEquals($this->_protobuff->encode(array(
             'a' => array(

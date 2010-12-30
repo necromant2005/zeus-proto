@@ -40,14 +40,12 @@ function ZendTest_Autoloader($class)
     if ($file) {
         $file .= implode('/', $segments) . '.php';
         if ($file[0]=='/') {
-            var_dump($file);
             if (file_exists($file)) {
                 return include_once $file;
             }
         } else {
             foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
                 $pathname = realpath($path) . '/' . $file;
-                var_dump($pathname);
                 if (file_exists($pathname)) {
                     return include_once $pathname;
                 }
