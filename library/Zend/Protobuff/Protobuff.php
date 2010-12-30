@@ -18,7 +18,7 @@ class Protobuff
 
     public function encode($map, $values)
     {
-        $encoder = new Decoder();
+        $encoder = new Encoder();
         return $encoder->encode($map, $values);
     }
 }
