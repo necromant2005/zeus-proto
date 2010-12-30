@@ -3,12 +3,6 @@ namespace Zend\Protobuff;
 
 class Decoder
 {
-    private $_wireTypeClass = array(
-        0 => array(
-            Protobuff::INT32, Protobuff::INT64
-        ),
-    );
-
     public function decode(array $map, $buffer)
     {
         $decoded = array();
@@ -20,17 +14,6 @@ class Decoder
         return $decoded;
     }
 
-    protected function _getWireTypeClass(array $options)
-    {
-        $type = $options[Protobuff::FIELD_TYPE];
-        foreach ($this->_wireTypeClass as $class=>$types) {
-            if (in_array($type, $types)) {
-                return $type;
-            }
-        }
-        throw new \Exception('Unsupport wire type "' . $type . '"');
-    }
-
     protected function _decodeWireType(&$buffer, $number, array $options)
     {
         $encodedWireType = $buffer[0];
@@ -39,11 +22,11 @@ class Decoder
 
     protected function _decodeValue(&$buffer, array $options)
     {
-        switch ($this->_getWireTypeClass($options)) {
+        switch (Protobuff::getWireTypeClass($options)) {
             case 0:
                 return $this->_decodeValue128($buffer, $options);
             default:
-                throw new \Exception();
+                throw new \Exception('Can\'t decode class ' . Protobuff::getWireTypeClass($options));
         }
     }
 

@@ -35,5 +35,12 @@ class ProtobuffTest extends \PHPUnit_Framework_TestCase
             ),
         ), array('a'=>150)), file_get_contents(__DIR__ . '/_files/example/Test1.pb'));
     }
+
+    public function testGetWireTypeClass()
+    {
+        $this->assertEquals(ProtocolBuffers::getWireTypeClass(array(
+            ProtocolBuffers::FIELD_TYPE=>ProtocolBuffers::INT32
+        )), ProtocolBuffers::TYPE_VARIANT);
+    }
 }
 
