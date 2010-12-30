@@ -17,7 +17,7 @@ class ProtobuffTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_protobuff->decode(array(
             'a' => array(
                 'required' => true,
-                'type'     => ProtocolBuffers::INT32,
+                'type'     => ProtocolBuffers::TYPE_INT32,
                 'default'  => 1,
             ),
         ), file_get_contents(__DIR__ . '/_files/example/Test1.pb')), array(
@@ -30,7 +30,7 @@ class ProtobuffTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_protobuff->encode(array(
             'a' => array(
                 'required' => true,
-                'type'     => ProtocolBuffers::INT32,
+                'type'     => ProtocolBuffers::TYPE_INT32,
                 'default'  => 1,
             ),
         ), array('a'=>150)), file_get_contents(__DIR__ . '/_files/example/Test1.pb'));
@@ -39,8 +39,8 @@ class ProtobuffTest extends \PHPUnit_Framework_TestCase
     public function testGetWireTypeClass()
     {
         $this->assertEquals(ProtocolBuffers::getWireTypeClass(array(
-            ProtocolBuffers::FIELD_TYPE=>ProtocolBuffers::INT32
-        )), ProtocolBuffers::TYPE_VARIANT);
+            ProtocolBuffers::FIELD_TYPE=>ProtocolBuffers::TYPE_INT32
+        )), ProtocolBuffers::CLASS_VARIANT);
     }
 }
 
