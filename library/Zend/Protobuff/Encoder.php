@@ -3,8 +3,6 @@ namespace Zend\Protobuff;
 
 class Encoder
 {
-    //const
-
     private $_wireTypeClass = array(
         0 => array(
             Protobuff::INT32, Protobuff::INT64
