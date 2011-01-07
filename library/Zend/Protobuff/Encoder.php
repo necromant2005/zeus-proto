@@ -18,11 +18,6 @@ class Encoder extends AbstractProtobuff
         return $buffer;
     }
 
-    protected function _encodeWireType($number, array $options)
-    {
-        return chr($number<<3|$this->_getWireTypeClass($options));
-    }
-
     protected function _encodeValue($value, array $options)
     {
         switch ($this->_getWireTypeClass($options)) {

@@ -6,6 +6,7 @@ abstract class AbstractProtobuff
     /* fields */
     const FIELD_REQUIRED = 'required';
     const FIELD_TYPE     = 'type';
+    const FIELD_NAME     = 'name';
 
     /* types */
     const TYPE_INT32  = 'int32';
@@ -64,6 +65,11 @@ abstract class AbstractProtobuff
             }
         }
         throw new \Exception('Unsupport wire type "' . $type . '"');
+    }
+
+    protected function _encodeWireType($number, array $options)
+    {
+        return chr($number<<3|$this->_getWireTypeClass($options));
     }
 }
 

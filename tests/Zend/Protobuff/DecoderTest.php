@@ -37,5 +37,21 @@ class DecoderTest extends \PHPUnit_Framework_TestCase
             'a' => 300,
         ));
     }
+
+    public function testTwoBytes()
+    {
+        $this->assertEquals($this->_protobuff->decode(array(
+            'node_id' => array(
+                'required' => true,
+                'type'     => Pb\AbstractProtobuff::TYPE_INT32,
+            ),
+            'version' => array(
+                'required' => true,
+                'type'     => Pb\AbstractProtobuff::TYPE_INT64,
+            ),
+        ), file_get_contents(__DIR__ . '/_files/example/ClockEntry.pb')), array(
+            'node_id'=>12, 'version'=>12345
+        ));
+    }
 }
 
