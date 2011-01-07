@@ -23,7 +23,7 @@ class Decoder extends AbstractProtobuff
     protected function _decodeValue(&$buffer, array $options)
     {
         switch ($this->_getWireTypeClass($options)) {
-            case 0:
+            case static::CLASS_VARIANT:
                 return $this->_decodeValue128($buffer, $options);
             default:
                 throw new \Exception('Can\'t decode class ' . $this->_getWireTypeClass($options));

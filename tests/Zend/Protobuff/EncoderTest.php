@@ -22,6 +22,16 @@ class EncoderTest extends \PHPUnit_Framework_TestCase
         ), array('a'=>150)), file_get_contents(__DIR__ . '/_files/example/Test1.pb'));
     }
 
+    public function testEncode300()
+    {
+        $this->assertEquals($this->_protobuff->encode(array(
+            'a' => array(
+                'required' => true,
+                'type'     => Pb\AbstractProtobuff::TYPE_INT32,
+            ),
+        ), array('a'=>300)), file_get_contents(__DIR__ . '/_files/example/Test2.pb'));
+    }
+
     public function testEncodeTwoBytes()
     {
         $this->assertEquals($this->_protobuff->encode(array(
@@ -34,6 +44,15 @@ class EncoderTest extends \PHPUnit_Framework_TestCase
                 'type'     => Pb\AbstractProtobuff::TYPE_INT64,
             ),
         ), array('node_id'=>12, 'version'=>12345)), file_get_contents(__DIR__ . '/_files/example/ClockEntry.pb'));
+    }
+
+    private function _dump($buffer)
+    {
+        for ($i=0;$i<strlen($buffer);$i++) {
+            echo ' ' . ord($buffer[$i]);
+        }
+        echo PHP_EOL;
+        return $buffer;
     }
 }
 
