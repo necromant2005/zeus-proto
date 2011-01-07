@@ -24,5 +24,18 @@ class DecoderTest extends \PHPUnit_Framework_TestCase
             'a' => 150,
         ));
     }
+
+    public function testDecode300()
+    {
+        $this->assertEquals($this->_protobuff->decode(array(
+            'a' => array(
+                'required' => true,
+                'type'     => Pb\AbstractProtobuff::TYPE_INT32,
+                'default'  => 1,
+            ),
+        ), file_get_contents(__DIR__ . '/_files/example/Test2.pb')), array(
+            'a' => 300,
+        ));
+    }
 }
 

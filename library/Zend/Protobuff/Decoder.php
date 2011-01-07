@@ -42,12 +42,7 @@ class Decoder extends AbstractProtobuff
         $bytes = array_map(function($value){ return substr($value, 1); }, $bytes);
         $bits = join('', $bytes);
         $bits = ltrim($bits, '0');
-        $bits = str_repeat('0', strlen($bits)%8) . $bits;
-        $value = 0;
-        for ($i=0;$i<strlen($bits)/8;$i++) {
-            $value += bindec(substr($bits, $i*8, 8));
-        }
-        return $value;
+        return bindec($bits);
     }
 }
 
